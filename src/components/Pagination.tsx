@@ -1,21 +1,51 @@
-import React from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { VscChevronLeft, VscChevronRight } from 'react-icons/vsc';
+import usePagination from '../hook/usePagination';
 
-const Pagination = () => {
+type PaginationProps = {
+  page: number;
+  size: number;
+  totalCount: number;
+  updatePage: (pageIndex: number) => void;
+};
+
+const Pagination = ({ page, size, totalCount, updatePage }: PaginationProps) => {
+  const { min, max, current, changePage, prev, next } = usePagination({ page, size, totalCount, rangeCount: 5 });
+  const pages = useMemo(() => Array.from({ length: max - min + 1 }, (v, i) => i + min), [min, max]);
+
+  useEffect(() => {
+    updatePage(current);
+  }, [current]);
+
+  const onClickNext = useCallback(() => {
+    if (!next) return;
+    changePage(max + 1);
+  }, [next, max]);
+
+  const onClickPrev = useCallback(() => {
+    if (!prev) return;
+    changePage(min - 1);
+  }, [next, min]);
+
   return (
     <Container>
-      <Button disabled>
+      <Button disabled={!prev} onClick={onClickPrev}>
         <VscChevronLeft />
       </Button>
-      <PageWrapper>
-        {[1, 2, 3, 4, 5].map((page) => (
-          <Page key={page} selected={page === 1} disabled={page === 1}>
-            {page}
+      <PageWrapper key={pages.join(',')}>
+        {pages.map((pageIndex) => (
+          <Page
+            key={pageIndex}
+            selected={pageIndex === page}
+            disabled={pageIndex === page}
+            onClick={() => changePage(pageIndex)}
+          >
+            {pageIndex}
           </Page>
         ))}
       </PageWrapper>
-      <Button disabled={false}>
+      <Button disabled={!next} onClick={onClickNext}>
         <VscChevronRight />
       </Button>
     </Container>

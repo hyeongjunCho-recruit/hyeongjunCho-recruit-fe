@@ -1,30 +1,53 @@
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import type { NextPage } from 'next';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import products from '../api/data/products.json';
 import ProductList from '../components/ProductList';
 import Pagination from '../components/Pagination';
+import axios from 'axios';
+import { Product } from '../types/product';
+
+const size = 10;
 
 const HomePage: NextPage = () => {
   const router = useRouter();
   const { page } = router.query;
+  const [products, setProducts] = useState<Product[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(0);
+
+  const updatePage = useCallback((pageIndex: number) => {
+    router.replace(`/?page=${pageIndex}`, '', { shallow: true });
+  }, []);
+
+  useEffect(() => {
+    if (!page) {
+      updatePage(1);
+      return;
+    }
+    const asyncFunc = async () => {
+      try {
+        const res = await axios.get(`/products?page=${page}&size=${size}`);
+        setProducts(res.data.data.products);
+        setTotalCount(res.data.data.totalCount);
+      } catch (error) {
+        setProducts([]);
+        setTotalCount(0);
+        return;
+      }
+    };
+    asyncFunc();
+  }, [page]);
+
+  if (!page) return null;
+  if (products.length === 0) return null;
+  if (totalCount === 0) return null;
 
   return (
     <>
-      <Header>
-        <Link href='/'>
-          <Title>HAUS</Title>
-        </Link>
-        <Link href='/login'>
-          <p>login</p>
-        </Link>
-      </Header>
       <Container>
-        <ProductList products={products.slice(0, 10)} />
-        <Pagination />
+        <ProductList products={products} />
+        <Pagination page={+page} size={size} totalCount={totalCount} updatePage={updatePage} />
       </Container>
     </>
   );
@@ -32,18 +55,7 @@ const HomePage: NextPage = () => {
 
 export default HomePage;
 
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-`;
-
-const Title = styled.a`
-  font-size: 48px;
-`;
-
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;

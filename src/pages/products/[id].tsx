@@ -1,35 +1,62 @@
 import Link from 'next/link';
-import type { NextPage } from 'next';
+import type { GetServerSideProps, InferGetServerSidePropsType, NextPage } from 'next';
 import React from 'react';
 import styled from 'styled-components';
 
-import products from '../../api/data/products.json';
+import axios from 'axios';
+import Error from '../../components/Error';
+import { Product } from '../../types/product';
 
-const ProductDetailPage: NextPage = () => {
-  const product = products[0];
+function ProductDetailPage({ product }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  if (product)
+    return (
+      <>
+        <Thumbnail src={product.thumbnail ? product.thumbnail : '/defaultThumbnail.jpg'} />
+        <ProductInfoWrapper>
+          <Name>{product.name}</Name>
+          <Price>{product.price}원</Price>
+        </ProductInfoWrapper>
+      </>
+    );
+  return <Error />;
+}
 
-  return (
-    <>
-      <Header>
-        <Link href='/'>
-          <Title>HAUS</Title>
-        </Link>
-        <Link href='/login'>
-          <p>login</p>
-        </Link>
-      </Header>
-      <Thumbnail src={product.thumbnail ? product.thumbnail : '/defaultThumbnail.jpg'} />
-      <ProductInfoWrapper>
-        <Name>{product.name}</Name>
-        <Price>{product.price}원</Price>
-      </ProductInfoWrapper>
-    </>
-  );
+export const getServerSideProps: GetServerSideProps<{ product: Product }> = async (context) => {
+  const id = context.params?.id ?? '-1';
+  if (id === '-1') {
+    return {
+      props: {
+        product: null,
+      },
+    };
+  }
+  try {
+    const res = await axios.get(`/products/${id}`);
+    console.log(res);
+    if (!res?.data?.data?.product) {
+      return {
+        props: {
+          product: null,
+        },
+      };
+    }
+    return {
+      props: {
+        product: res.data.data.product,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        product: null,
+      },
+    };
+  }
 };
 
 export default ProductDetailPage;
 
-const Header = styled.div`
+const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;

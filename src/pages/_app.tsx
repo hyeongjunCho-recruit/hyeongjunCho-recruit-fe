@@ -1,10 +1,17 @@
+import axios from 'axios';
 import type { AppProps } from 'next/app';
 import styled from 'styled-components';
+import { Provider, TypedUseSelectorHook, useSelector } from 'react-redux';
 
 import setupMSW from '../api/setup';
+import store, { RootState } from '../store';
 import GlobalStyle from '../styles/GlobalStyle';
+import Header from '../components/Header';
 
 setupMSW();
+
+axios.defaults.baseURL = 'https://api.sixshop.com';
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -12,7 +19,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       <GlobalStyle />
       <Background />
       <Content>
-        <Component {...pageProps} />
+        <Provider store={store}>
+          <Header />
+          <Component {...pageProps} />
+        </Provider>
       </Content>
     </>
   );
