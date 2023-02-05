@@ -94,20 +94,24 @@ const LoginPage: NextPage = () => {
           <TextInput
             type='text'
             {...register('id', { required: true })}
-            invalid={!!errors['invalid-id']}
+            onInput={(e) => setIdFilled(isValidID(e.currentTarget.value))}
+            invalid={!idFilled}
             onBlur={(e) => confirmID(e.currentTarget.value)}
           />
-          {errors['invalid-id'] && <ErrorText>{errors['invalid-id'].message as string}</ErrorText>}
+          {!idFilled && errors['invalid-id'] && (
+            <ErrorText>{errors['invalid-id'].message as string}</ErrorText>
+          )}
         </FormElement>
         <FormElement>
           <Label>비밀번호</Label>
           <TextInput
             type='password'
             {...register('password', { required: true })}
-            invalid={!!errors['invalid-password']}
+            onInput={(e) => setPasswordFilled(isValidPW(e.currentTarget.value))}
+            invalid={!passwordFilled}
             onBlur={(e) => confirmPW(e.currentTarget.value)}
           />
-          {errors['invalid-password'] && (
+          {!passwordFilled && errors['invalid-password'] && (
             <ErrorText>{errors['invalid-password'].message as string}</ErrorText>
           )}
         </FormElement>
