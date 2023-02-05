@@ -16,17 +16,17 @@ const Pagination = ({ page, size, totalCount, updatePage }: PaginationProps) => 
 
   useEffect(() => {
     updatePage(current);
-  }, [current]);
+  }, [current, updatePage]);
 
   const onClickNext = useCallback(() => {
     if (!next) return;
     changePage(max + 1);
-  }, [next, max]);
+  }, [next, max, changePage]);
 
   const onClickPrev = useCallback(() => {
     if (!prev) return;
     changePage(min - 1);
-  }, [next, min]);
+  }, [prev, min, changePage]);
 
   return (
     <Container>

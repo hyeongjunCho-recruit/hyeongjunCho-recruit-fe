@@ -19,7 +19,7 @@ const HomePage: NextPage = () => {
 
   const updatePage = useCallback((pageIndex: number) => {
     router.replace(`/?page=${pageIndex}`, '', { shallow: true });
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (!router.asPath || router.asPath === "/") {
@@ -38,7 +38,7 @@ const HomePage: NextPage = () => {
       }
     };
     asyncFunc();
-  }, [page]);
+  }, [page, router.asPath, updatePage]);
 
   if (!page) return null;
   if (products.length === 0) return <Error />;

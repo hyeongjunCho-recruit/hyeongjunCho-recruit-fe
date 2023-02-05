@@ -19,8 +19,8 @@ const ProductList = ({ products }: ProductListProps) => {
   return (
     <Container>
       {products.map((product) => (
-        <Flexdiv onClick={() => showProduct(product.id)}>
-          <ProductItem key={product.id} product={product} />
+        <Flexdiv key={product.id} onClick={() => showProduct(product.id)}>
+          <ProductItem product={product} />
         </Flexdiv>
       ))}
     </Container>

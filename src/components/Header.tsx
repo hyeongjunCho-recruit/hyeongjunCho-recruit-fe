@@ -8,11 +8,13 @@ import { clearUser, setUser } from '../store/modules/userSlice';
 export default function Header() {
   const dispatch = useDispatch();
   const user = useAppSelector((state) => state.user.user);
+  
   useEffect(() => {
     if (window.localStorage.getItem('user')) {
-      dispatch(setUser(JSON.parse(window.localStorage.getItem('user') ?? "{}")));
+      dispatch(setUser(JSON.parse(window.localStorage.getItem('user') ?? '{}')));
     }
-  }, []);
+  }, [dispatch]);
+
   return (
     <StyledHeader>
       <Link href='/'>
