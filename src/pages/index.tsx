@@ -22,7 +22,8 @@ const HomePage: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    if (!page) {
+    if (!router.asPath || router.asPath === "/") {
+      updatePage(1);
       return;
     }
     const asyncFunc = async () => {
