@@ -10,13 +10,13 @@ import { Product } from '../../types/product';
 function ProductDetailPage({ product }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   if (product)
     return (
-      <>
+      <section>
         <Thumbnail src={product.thumbnail ? product.thumbnail : '/defaultThumbnail.jpg'} />
         <ProductInfoWrapper>
           <Name>{product.name}</Name>
-          <Price>{product.price}원</Price>
+          <Price>{product.price?.toLocaleString()}원</Price>
         </ProductInfoWrapper>
-      </>
+      </section>
     );
   return <Error />;
 }

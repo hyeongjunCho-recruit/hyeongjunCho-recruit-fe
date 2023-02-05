@@ -65,6 +65,7 @@ const Container = styled.div`
 `;
 
 const Button = styled.button`
+  cursor: pointer;
   &:disabled {
     color: #e2e2ea;
     cursor: default;
@@ -85,6 +86,7 @@ const Page = styled.button<PageType>`
   background-color: ${({ selected }) => (selected ? '#000' : 'transparent')};
   color: ${({ selected }) => (selected ? '#fff' : '#000')};
   font-size: 20px;
+  cursor: pointer;
 
   & + & {
     margin-left: 4px;

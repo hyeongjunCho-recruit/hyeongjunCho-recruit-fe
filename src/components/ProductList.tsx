@@ -13,7 +13,7 @@ const ProductList = ({ products }: ProductListProps) => {
   const router = useRouter();
 
   const showProduct = (id: string) => {
-    router.replace(`/products/${id}`, '', { shallow: true });
+    router.push(`/products/${id}`, '', { shallow: true });
   };
 
   return (
