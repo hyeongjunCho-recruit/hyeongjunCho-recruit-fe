@@ -40,7 +40,7 @@ const HomePage: NextPage = () => {
     asyncFunc();
   }, [page]);
 
-  if (!page) return <Error />;
+  if (!page) return null;
   if (products.length === 0) return <Error />;
   if (totalCount === 0) return <Error />;
 
