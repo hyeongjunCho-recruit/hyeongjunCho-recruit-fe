@@ -7,6 +7,7 @@ import ProductList from '../components/ProductList';
 import Pagination from '../components/Pagination';
 import axios from 'axios';
 import { Product } from '../types/product';
+import Error from '../components/Error';
 
 const size = 10;
 
@@ -22,7 +23,6 @@ const HomePage: NextPage = () => {
 
   useEffect(() => {
     if (!page) {
-      updatePage(1);
       return;
     }
     const asyncFunc = async () => {
@@ -39,9 +39,9 @@ const HomePage: NextPage = () => {
     asyncFunc();
   }, [page]);
 
-  if (!page) return null;
-  if (products.length === 0) return null;
-  if (totalCount === 0) return null;
+  if (!page) return <Error />;
+  if (products.length === 0) return <Error />;
+  if (totalCount === 0) return <Error />;
 
   return (
     <>

@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import usePagination from '../hook/usePagination';
 
@@ -9,10 +10,18 @@ type ProductListProps = {
 };
 
 const ProductList = ({ products }: ProductListProps) => {
+  const router = useRouter();
+
+  const showProduct = (id: string) => {
+    router.replace(`/products/${id}`, '', { shallow: true });
+  };
+
   return (
     <Container>
       {products.map((product) => (
-        <ProductItem key={product.id} product={product} />
+        <Flexdiv onClick={() => showProduct(product.id)}>
+          <ProductItem key={product.id} product={product} />
+        </Flexdiv>
       ))}
     </Container>
   );
@@ -25,4 +34,8 @@ const Container = styled.div`
   flex-wrap: wrap;
   width: 400px;
   margin-left: -20px;
+`;
+
+const Flexdiv = styled.div`
+  display: flex;
 `;
