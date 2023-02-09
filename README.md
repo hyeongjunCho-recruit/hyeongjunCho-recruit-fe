@@ -2,4 +2,9 @@
 
 - [과제 안내 링크](https://www.notion.so/sixshop/af7f8a9586b648e6ba92a8c24ff0ef66)
 - 과제 제출 기한은 과제 메일 발송일로부터 7일 후 자정 12시까지 입니다. 기한을 꼭 지켜주세요.
-# hyeongjunCho-fe
+  
+# hyeongjunCho-recruit-fe
+
+### 추가 기술 스택
+
+- React Hook Form, Redux Toolkit, Axios
